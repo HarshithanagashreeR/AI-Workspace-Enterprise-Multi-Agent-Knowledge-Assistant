@@ -1,0 +1,230 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-8.2.2, pluggy-1.6.0 -- /Users/harshithanagashree.r/Documents/ai/backend/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/harshithanagashree.r/Documents/ai/backend
+plugins: anyio-4.14.2
+collecting ... collected 2 items
+
+tests/test_workspace_api.py::test_workspace_conversation_flow PASSED     [ 50%]
+tests/test_workspace_api.py::test_upload_multiple_and_document_filtering ERROR [100%]
+
+==================================== ERRORS ====================================
+________ ERROR at setup of test_upload_multiple_and_document_filtering _________
+venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:924: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlite3.IntegrityError: UNIQUE constraint failed: refresh_tokens.token
+
+The above exception was the direct cause of the following exception:
+tests/test_workspace_api.py:27: in auth_token
+    resp = await async_client.post("/api/auth/login", json=login_payload)
+venv/lib/python3.12/site-packages/httpx/_client.py:1892: in post
+    return await self.request(
+venv/lib/python3.12/site-packages/httpx/_client.py:1574: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+venv/lib/python3.12/site-packages/httpx/_client.py:1661: in send
+    response = await self._send_handling_auth(
+venv/lib/python3.12/site-packages/httpx/_client.py:1689: in _send_handling_auth
+    response = await self._send_handling_redirects(
+venv/lib/python3.12/site-packages/httpx/_client.py:1726: in _send_handling_redirects
+    response = await self._send_single_request(request)
+venv/lib/python3.12/site-packages/httpx/_client.py:1763: in _send_single_request
+    response = await transport.handle_async_request(request)
+venv/lib/python3.12/site-packages/httpx/_transports/asgi.py:164: in handle_async_request
+    await self.app(scope, receive, send)
+venv/lib/python3.12/site-packages/fastapi/applications.py:1054: in __call__
+    await super().__call__(scope, receive, send)
+venv/lib/python3.12/site-packages/starlette/applications.py:123: in __call__
+    await self.middleware_stack(scope, receive, send)
+venv/lib/python3.12/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+venv/lib/python3.12/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+venv/lib/python3.12/site-packages/starlette/middleware/base.py:189: in __call__
+    with collapse_excgroups():
+/opt/homebrew/Cellar/python@3.12/3.12.13_4/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py:158: in __exit__
+    self.gen.throw(value)
+venv/lib/python3.12/site-packages/starlette/_utils.py:93: in collapse_excgroups
+    raise exc
+venv/lib/python3.12/site-packages/starlette/middleware/base.py:191: in __call__
+    response = await self.dispatch_func(request, call_next)
+app/core/middleware.py:58: in dispatch
+    response = await call_next(request)
+venv/lib/python3.12/site-packages/starlette/middleware/base.py:165: in call_next
+    raise app_exc
+venv/lib/python3.12/site-packages/starlette/middleware/base.py:151: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+venv/lib/python3.12/site-packages/starlette/middleware/cors.py:85: in __call__
+    await self.app(scope, receive, send)
+venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py:65: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+venv/lib/python3.12/site-packages/starlette/_exception_handler.py:64: in wrapped_app
+    raise exc
+venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    await app(scope, receive, sender)
+venv/lib/python3.12/site-packages/starlette/routing.py:756: in __call__
+    await self.middleware_stack(scope, receive, send)
+venv/lib/python3.12/site-packages/starlette/routing.py:776: in app
+    await route.handle(scope, receive, send)
+venv/lib/python3.12/site-packages/starlette/routing.py:297: in handle
+    await self.app(scope, receive, send)
+venv/lib/python3.12/site-packages/starlette/routing.py:77: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+venv/lib/python3.12/site-packages/starlette/_exception_handler.py:64: in wrapped_app
+    raise exc
+venv/lib/python3.12/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    await app(scope, receive, sender)
+venv/lib/python3.12/site-packages/starlette/routing.py:72: in app
+    response = await func(request)
+venv/lib/python3.12/site-packages/fastapi/routing.py:278: in app
+    raw_response = await run_endpoint_function(
+venv/lib/python3.12/site-packages/fastapi/routing.py:193: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+venv/lib/python3.12/site-packages/starlette/concurrency.py:42: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+venv/lib/python3.12/site-packages/anyio/to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py:2641: in run_sync_in_worker_thread
+    return await future
+venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py:1033: in run
+    result = context.run(func, *args)
+app/api/auth.py:37: in login
+    return auth_service.login(login_in, ip_address=ip_address)
+app/services/auth_service.py:77: in login
+    self.stats_repo.add_audit_log(
+app/repositories/stats_repo.py:33: in add_audit_log
+    self.db.flush()
+venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4341: in flush
+    self._flush(objects)
+venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4476: in _flush
+    with util.safe_reraise():
+venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py:4437: in _flush
+    flush_context.execute()
+venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py:1233: in _emit_insert_statements
+    result = connection.execute(
+venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1418: in execute
+    return meth(
+venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py:515: in _execute_on_connection
+    return connection._execute_clauseelement(
+venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1640: in _execute_clauseelement
+    ret = self._execute_context(
+venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1846: in _execute_context
+    return self._exec_single_context(
+venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:2353: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:924: in do_execute
+    cursor.execute(statement, parameters)
+E   sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: refresh_tokens.token
+E   [SQL: INSERT INTO refresh_tokens (token, user_id, expires_at, is_revoked, created_at) VALUES (?, ?, ?, ?, ?)]
+E   [parameters: ('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODUxNTE5ODYsInN1YiI6IjEiLCJ0eXBlIjoicmVmcmVzaCJ9.B6Wr1n-pqrVAUyw32ND0KaT4rpcuHmbgnMT9w095QW4', 1, '2026-07-27 11:33:06.391673', 0, '2026-07-20 11:33:06.391847')]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)
+---------------------------- Captured stdout setup -----------------------------
+{"timestamp": "2026-07-20T11:33:06.225202Z", "level": "INFO", "logger": "httpx", "message": "HTTP Request: POST http://testserver/api/auth/register \"HTTP/1.1 400 Bad Request\""}
+------------------------------ Captured log setup ------------------------------
+INFO     httpx:_client.py:1773 HTTP Request: POST http://testserver/api/auth/register "HTTP/1.1 400 Bad Request"
+=============================== warnings summary ===============================
+app/schemas/user.py:21
+  /Users/harshithanagashree.r/Documents/ai/backend/app/schemas/user.py:21: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class UserResponse(UserBase):
+
+venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /Users/harshithanagashree.r/Documents/ai/backend/venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+app/schemas/document.py:5
+  /Users/harshithanagashree.r/Documents/ai/backend/app/schemas/document.py:5: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class DocumentResponse(BaseModel):
+
+venv/lib/python3.12/site-packages/pypdf/_crypt_providers/_cryptography.py:32
+  /Users/harshithanagashree.r/Documents/ai/backend/venv/lib/python3.12/site-packages/pypdf/_crypt_providers/_cryptography.py:32: CryptographyDeprecationWarning: ARC4 has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.ARC4 and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
+    from cryptography.hazmat.primitives.ciphers.algorithms import AES, ARC4
+
+app/schemas/chat.py:10
+  /Users/harshithanagashree.r/Documents/ai/backend/app/schemas/chat.py:10: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class MessageResponse(BaseModel):
+
+app/schemas/chat.py:27
+  /Users/harshithanagashree.r/Documents/ai/backend/app/schemas/chat.py:27: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class ConversationResponse(BaseModel):
+
+app/schemas/stats.py:5
+  /Users/harshithanagashree.r/Documents/ai/backend/app/schemas/stats.py:5: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class AuditLogResponse(BaseModel):
+
+app/schemas/stats.py:16
+  /Users/harshithanagashree.r/Documents/ai/backend/app/schemas/stats.py:16: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class TokenUsageResponse(BaseModel):
+
+app/schemas/workspace.py:13
+  /Users/harshithanagashree.r/Documents/ai/backend/app/schemas/workspace.py:13: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class WorkspaceResponse(BaseModel):
+
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_upload_multiple_and_document_filtering
+  /Users/harshithanagashree.r/Documents/ai/backend/venv/lib/python3.12/site-packages/httpx/_client.py:1426: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=ASGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
+
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_upload_multiple_and_document_filtering
+  /Users/harshithanagashree.r/Documents/ai/backend/app/core/logging_config.py:10: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "timestamp": datetime.utcnow().isoformat() + "Z",
+
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_upload_multiple_and_document_filtering
+  /Users/harshithanagashree.r/Documents/ai/backend/app/core/security.py:30: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_upload_multiple_and_document_filtering
+  /Users/harshithanagashree.r/Documents/ai/backend/app/core/security.py:39: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    expire = datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_upload_multiple_and_document_filtering
+  /Users/harshithanagashree.r/Documents/ai/backend/app/services/auth_service.py:68: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    expires_at = datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_upload_multiple_and_document_filtering
+  /Users/harshithanagashree.r/Documents/ai/backend/venv/lib/python3.12/site-packages/sqlalchemy/sql/schema.py:3585: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+tests/test_workspace_api.py::test_workspace_conversation_flow
+  /Users/harshithanagashree.r/Documents/ai/backend/venv/lib/python3.12/site-packages/jose/jwt.py:311: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = timegm(datetime.utcnow().utctimetuple())
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/test_workspace_api.py::test_upload_multiple_and_document_filtering
+=================== 1 passed, 40 warnings, 1 error in 1.68s ====================

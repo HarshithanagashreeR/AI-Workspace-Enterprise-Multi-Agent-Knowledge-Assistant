@@ -26,10 +26,27 @@ async def reasoning_node(state: AgentState) -> dict:
     # Mock mode fallback
     if is_mock_mode() or not contexts:
         logger.info("Reasoning Agent running in MOCK mode")
+        if contexts:
+            clean_contexts = [c for c in contexts if "Neo4j Knowledge Graph" not in c.get("metadata", {}).get("filename", "")]
+            if not clean_contexts:
+                clean_contexts = contexts
+            
+            # Format and return the retrieved context as the answer
+            draft_answer = f"According to the retrieved source document ({clean_contexts[0].get('metadata', {}).get('filename', 'document')}):\n\n"
+            draft_answer += clean_contexts[0]["content"].strip()
+            
+            if len(clean_contexts) > 1:
+                draft_answer += f"\n\nAdditional source context ({clean_contexts[1].get('metadata', {}).get('filename', 'document')}):\n\n"
+                draft_answer += clean_contexts[1]["content"].strip()
+                
+            return {
+                "reasoning_synthesis": draft_answer,
+                "draft_answer": draft_answer
+            }
+            
         mock_answer = (
-            f"Regarding your query about '{question}': Based on our knowledge base, "
-            "Sarah Jenkins is a Boston-based Principal Engineer specialized in LangGraph orchestration. "
-            "Additionally, database connections are managed via secure PostgreSQL pools."
+            f"Regarding your query: '{question}'. No context documents were found. "
+            "Please upload a document to your workspace to retrieve information."
         )
         return {
             "reasoning_synthesis": mock_answer,

@@ -121,6 +121,14 @@ class DocumentService:
         filename: str, 
         owner_id: int
     ):
+        from app.database.session import SessionLocal
+        from app.repositories.document_repo import DocumentRepository
+        from app.repositories.stats_repo import StatsRepository
+        
+        db = SessionLocal()
+        doc_repo = DocumentRepository(db)
+        stats_repo = StatsRepository(db)
+        
         try:
             # 1. Parse pages
             pages = DocumentProcessor.parse_file_to_pages(file_path, file_ext)
@@ -158,33 +166,39 @@ class DocumentService:
                 logger.error(f"Graph entity extraction failed: {ge}")
             
             # 4. Update Postgres status
-            self.doc_repo.update_status(
+            doc_repo.update_status(
                 doc_id=doc_id,
                 status="processed",
                 embedding_count=chunks_count
             )
             
             # Audit log success
-            self.stats_repo.add_audit_log(
+            stats_repo.add_audit_log(
                 user_id=owner_id,
                 action="upload_document_success",
                 details={"filename": filename, "chunks": chunks_count}
             )
-            self.db.commit()
+            db.commit()
 
         except Exception as e:
+            logger.error(f"Error in background document processing: {e}", exc_info=True)
             # Update status to failed
-            self.doc_repo.update_status(
-                doc_id=doc_id,
-                status="failed"
-            )
-            # Audit log failure
-            self.stats_repo.add_audit_log(
-                user_id=owner_id,
-                action="upload_document_failed",
-                details={"filename": filename, "error": str(e)}
-            )
-            self.db.commit()
+            try:
+                doc_repo.update_status(
+                    doc_id=doc_id,
+                    status="failed"
+                )
+                # Audit log failure
+                stats_repo.add_audit_log(
+                    user_id=owner_id,
+                    action="upload_document_failed",
+                    details={"filename": filename, "error": str(e)}
+                )
+                db.commit()
+            except Exception as inner_e:
+                logger.error(f"Failed to write failure status to DB: {inner_e}")
+        finally:
+            db.close()
 
     def delete_document(self, doc_id: int, owner_id: int, ip_address: Optional[str] = None) -> bool:
         db_doc = self.doc_repo.get_by_id(doc_id)
@@ -229,19 +243,24 @@ class DocumentService:
         if db_doc.owner_id != owner_id:
             raise HTTPException(status_code=403, detail="Not authorized to access this document")
             
-        res = self.vector_store.collection.get(
-            where={"document_id": doc_id},
-            limit=5,
-            include=["documents", "metadatas"]
-        )
+        try:
+            res = self.vector_store.collection.get(
+                where={"document_id": doc_id},
+                limit=5,
+                include=["documents", "metadatas"]
+            )
+        except Exception as e:
+            import logging
+            logging.getLogger("app.services.doc").error(f"ChromaDB preview fetch failed: {e}", exc_info=True)
+            res = {}
         
         preview = []
         docs = res.get("documents", [])
-        metas = res.get("metadatas", [])
+        metas = res.get("metadatas", []) if res.get("metadatas") else []
         
         for d, m in zip(docs, metas):
             preview.append({
                 "content": d,
-                "page": m.get("page_number", 1)
+                "page": m.get("page_number", 1) if m else 1
             })
         return preview

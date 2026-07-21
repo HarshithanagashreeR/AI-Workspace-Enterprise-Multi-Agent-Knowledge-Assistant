@@ -63,40 +63,9 @@ class Neo4jClient:
         Queries Neo4j for 1-hop connections matching the extracted query entities.
         """
         if self.mock_mode:
-            # Generate mock entity relationship returns matching evaluation facts
-            logger.info(f"[Mock Graph Query] Querying relationships for: {entity_names}")
-            mock_records = []
-            
-            entities_lower = [e.lower() for e in entity_names]
-            for term in entities_lower:
-                if "sarah" in term or "jenkins" in term or "langgraph" in term:
-                    mock_records.append({
-                        "source": "Sarah Jenkins",
-                        "relation": "SPECIALIZES_IN",
-                        "target": "LangGraph orchestration (Boston, MA)"
-                    })
-                if "david" in term or "miller" in term or "postgresql" in term:
-                    mock_records.append({
-                        "source": "David Miller",
-                        "relation": "EXPERIENCE",
-                        "target": "PostgreSQL database connection pools (8 years)"
-                    })
-                if "emily" in term or "watson" in term or "aws" in term:
-                    mock_records.append({
-                        "source": "Emily Watson",
-                        "relation": "WRITES",
-                        "target": "AWS IAM secrets rotating policies (June 2025)"
-                    })
-                    
-            # Fallback connection mapping if queries contain other nouns
-            if not mock_records and entity_names:
-                for name in entity_names[:2]:
-                    mock_records.append({
-                        "source": name,
-                        "relation": "ASSOCIATED_WITH",
-                        "target": f"Knowledge base references for {name}"
-                    })
-            return mock_records
+            # Seeded demo facts disabled in production/mock mode to avoid polluting search results
+            logger.info(f"[Mock Graph Query] Querying relationships for: {entity_names} (seeded facts disabled)")
+            return []
 
         cypher = (
             "MATCH (e:Entity) WHERE toLower(e.name) IN $names "

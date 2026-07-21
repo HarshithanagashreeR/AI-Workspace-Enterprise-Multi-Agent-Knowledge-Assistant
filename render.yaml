@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: enterprise-backend
+    runtime: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: enterprise-db
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_REFRESH_SECRET_KEY
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: RATE_LIMIT_PER_MINUTE
+        value: 100
+      - key: FRONTEND_URL
+        sync: false  # User can set this to their Vercel URL
+      - key: ENVIRONMENT
+        value: production
+
+databases:
+  - name: enterprise-db
+    databaseName: knowledge_platform
+    user: postgres
+    plan: free

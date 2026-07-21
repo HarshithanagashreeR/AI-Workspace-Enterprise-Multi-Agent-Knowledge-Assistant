@@ -1,5 +1,12 @@
 # AI-Enterprise Multi-Agent Knowledge Assistant
 
+<p align="left">
+  <a href="https://frontend-beige.vercel.app"><img src="https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel" alt="Vercel Deployed" /></a>
+  <a href="https://render.com"><img src="https://img.shields.io/badge/Render-Configured-blueviolet?style=for-the-badge&logo=render" alt="Render Configured" /></a>
+  <a href="https://github.com/HarshithanagashreeR/AI-Workspace-Enterprise-Multi-Agent-Knowledge-Assistant"><img src="https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github" alt="GitHub Repo" /></a>
+  <a href="https://frontend-beige.vercel.app"><img src="https://img.shields.io/badge/Live%20Demo-Visit%20App-success?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Live Demo" /></a>
+</p>
+
 A production-grade, highly scalable, Multi-Agent Enterprise Knowledge Intelligence Platform. This workspace combines a modern **React + TypeScript** frontend, a high-performance **FastAPI** backend, **PostgreSQL** for structured storage, and **ChromaDB** for vector embeddings. The Retrieval-Augmented Generation (RAG) pipeline is fully orchestrated using a 7-agent network coordinated through **LangGraph** and **LangChain**.
 
 ---

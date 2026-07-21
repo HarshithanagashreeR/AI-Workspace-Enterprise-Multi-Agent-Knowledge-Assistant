@@ -2,6 +2,7 @@ import chromadb
 import logging
 from typing import List, Dict, Any, Optional
 from app.config.config import settings
+from app.agents.state import is_mock_mode
 import uuid
 
 logger = logging.getLogger("app.vector_store")
@@ -36,8 +37,7 @@ class VectorStoreWrapper:
         if not chunks:
             return 0
             
-        api_key = settings.OPENAI_API_KEY
-        is_mock = not api_key or "mock" in api_key.lower() or api_key == "your_openai_api_key_here"
+        is_mock = is_mock_mode()
 
         text_list = []
         metadatas = []
@@ -92,8 +92,7 @@ class VectorStoreWrapper:
         """
         Performs semantic search over embedded chunks.
         """
-        api_key = settings.OPENAI_API_KEY
-        is_mock = not api_key or "mock" in api_key.lower() or api_key == "your_openai_api_key_here"
+        is_mock = is_mock_mode()
 
         try:
             if is_mock:

@@ -48,5 +48,12 @@ def calculate_cost(prompt_tokens: int, completion_tokens: int) -> float:
     return (prompt_tokens * 0.00000015) + (completion_tokens * 0.00000060)
 
 def is_mock_mode() -> bool:
-    # Returns True if OpenAI Key is default or missing
-    return not settings.OPENAI_API_KEY or "sk-proj-mock" in settings.OPENAI_API_KEY or settings.OPENAI_API_KEY == "your_openai_api_key_here"
+    import os
+    mock_env = os.getenv("MOCK_LLM", "false").lower() == "true"
+    return (
+        mock_env or 
+        not settings.OPENAI_API_KEY or 
+        "mock" in settings.OPENAI_API_KEY.lower() or 
+        settings.OPENAI_API_KEY == "your_openai_api_key_here"
+    )
+

@@ -26,5 +26,4 @@ services:
 databases:
   - name: enterprise-db
     databaseName: knowledge_platform
-    user: postgres
     plan: free

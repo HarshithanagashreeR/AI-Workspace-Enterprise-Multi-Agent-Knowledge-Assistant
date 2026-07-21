@@ -231,6 +231,7 @@ The application is configured using variables declared in the root `.env` or `ba
 | `JWT_REFRESH_SECRET_KEY` | Secret key used to sign refresh tokens | *Secure long random string* |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Lifetime of an access token | `30` |
 | `OPENAI_API_KEY` | Required API key for OpenAI LLM services | `sk-proj-...` |
+| `MOCK_LLM` | Set to 'true' to run fully for free in high-fidelity mock mode | `false` / `true` |
 | `CHROMA_PERSIST_DIRECTORY` | Disk directory for vector storage database | `./chromadb_store` |
 | `RATE_LIMIT_PER_MINUTE` | Maximum API requests per client IP per minute | `100` |
 | `FRONTEND_URL` | Allowed origin for CORS configurations | `http://localhost:5173` |
